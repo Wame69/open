@@ -1,5 +1,32 @@
 <?php
-//Усложненный вариант 
+echo "Задание 1<br/>";
+$a = 10;
+$b = 5;
+$oper ="+";
+switch ($oper) {
+    case "+":
+        $rezult = $a + $b;
+        echo "Сумма $a + $b = $rezult<br>";
+        break;
+    case "-":
+        $rezult = $a - $b;
+        echo "Разность $a - $b = $rezult<br>";
+        break;
+    case "*":
+        $rezult = $a * $b;
+        echo "Произведение $a * $b = $rezult<br>";
+        break;
+    case "/":
+        if ($b != 0) {
+            $rezult = $a / $b;
+            echo "Частное $a / $b = $rezult<br>";
+        } else {
+            echo "Ошибка: деление на ноль<br>";
+        }
+        break;
+}
+
+//Усложненный вариант 1 задания
 //файл index.html
 /*<!DOCTYPE html>
 <html lang="ru">
@@ -66,32 +93,7 @@ echo "<br>Операция: $operator<br>";
 echo "<br>Результат: $result<br>";
 ?>
 */
-echo "Задание 1<br/>";
-$a = 10;
-$b = 5;
-$oper ="+";
-switch ($oper) {
-    case "+":
-        $rezult = $a + $b;
-        echo "Сумма $a + $b = $rezult<br>";
-        break;
-    case "-":
-        $rezult = $a - $b;
-        echo "Разность $a - $b = $rezult<br>";
-        break;
-    case "*":
-        $rezult = $a * $b;
-        echo "Произведение $a * $b = $rezult<br>";
-        break;
-    case "/":
-        if ($b != 0) {
-            $rezult = $a / $b;
-            echo "Частное $a / $b = $rezult<br>";
-        } else {
-            echo "Ошибка: деление на ноль<br>";
-        }
-        break;
-}
+
 
 echo "<br>Задание 2</br>";
 $numbers = ["веном", "мяу мяу", "мишки", "Маша и медведь", "Солдат"];
