@@ -1,5 +1,71 @@
 <?php
+//Усложненный вариант 
+//файл index.html
+/*<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор</title>
+</head>
+<body>
 
+<form method="POST" action="index.php">
+    <label for="num1">Число 1:</label>
+    <input type="number" name="num1" step="any" required>
+    <br><br>
+    
+    <label for="num2">Число 2:</label>
+    <input type="number" name="num2" step="any" required>
+    <br><br>
+    
+    <label for="operator">Операция:</label>
+    <select name="operator" required>
+        <option value="+">Сложение</option>
+        <option value="-">Вычитание</option>
+        <option value="*">Умножение</option>
+        <option value="/">Деление</option>
+    </select>
+    <br><br>
+    
+    <input type="submit" value="Выполнить">
+</form>
+
+</body>
+</html>
+*/
+//файл index.php
+/*<?php
+
+$num1 = (float)($_POST['num1'] ?? 0);
+$num2 = (float)($_POST['num2'] ?? 0);
+$operator = $_POST['operator'] ?? '+';
+switch ($operator) {
+    case '+':
+        $result = $num1 + $num2;
+        break;
+    case '-':
+        $result = $num1 - $num2;
+        break;
+    case '*':
+        $result = $num1 * $num2;
+        break;
+    case '/':
+        if ($num2 != 0 && $num1 != 0) {
+            $result = $num1 / $num2;
+        } else {
+            $result = "Ошибка: деление на ноль!";
+        }
+        break;
+}
+
+echo "<br>Результат:<br>";
+echo "<br>Число 1: $num1<br>";
+echo "<br>Число 2: $num2<br>";
+echo "<br>Операция: $operator<br>";
+echo "<br>Результат: $result<br>";
+?>
+*/
 echo "Задание 1<br/>";
 $a = 10;
 $b = 5;
@@ -75,5 +141,33 @@ switch ($day)
     case 7:
         echo "Сегодня воскресенье<br>";
         break;
+}
+//Усложненный вариант решения
+echo "<br>Задание 5<br>";
+$day = date('N'); 
+switch ($day) {
+    case 1:
+        echo "Понедельник";
+        break;
+    case 2:
+        echo "Вторник";
+        break;
+    case 3:
+        echo "Среда";
+        break;
+    case 4:
+        echo "Четверг";
+        break;
+    case 5:
+        echo "Пятница";
+        break;
+    case 6:
+        echo "Суббота";
+        break;
+    case 7:
+        echo "Воскресенье";
+        break;
+    default:
+        echo "Некорректное значение дня";
 }
 ?>
