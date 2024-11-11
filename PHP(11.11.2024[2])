@@ -1,0 +1,79 @@
+<?php
+
+echo "Задание 1<br/>";
+$a = 10;
+$b = 5;
+$oper ="+";
+switch ($oper) {
+    case "+":
+        $rezult = $a + $b;
+        echo "Сумма $a + $b = $rezult<br>";
+        break;
+    case "-":
+        $rezult = $a - $b;
+        echo "Разность $a - $b = $rezult<br>";
+        break;
+    case "*":
+        $rezult = $a * $b;
+        echo "Произведение $a * $b = $rezult<br>";
+        break;
+    case "/":
+        if ($b != 0) {
+            $rezult = $a / $b;
+            echo "Частное $a / $b = $rezult<br>";
+        } else {
+            echo "Ошибка: деление на ноль<br>";
+        }
+        break;
+}
+
+echo "<br>Задание 2</br>";
+$numbers = ["веном", "мяу мяу", "мишки", "Маша и медведь", "Солдат"];
+for ($i = 0; $i < count($numbers); $i++)
+{
+    echo"$numbers[$i]<br>";
+}
+
+echo "<br>Задание 3<br>";
+$name = ["Тимур", "Иван", "Кирилл", "Данил","Никита"];
+foreach($name as $key)
+{
+    echo "Привет, $key<br>";
+}
+
+echo "<br>Задане 4<br>";
+$array = [1, 2, 3, 4, 5];
+$sum = 0;
+foreach($array as $rezult)
+{
+$sum += $rezult;
+}
+echo "Сумма массива равна: $sum<br>";
+
+echo "<br>Задание 5<br>";
+$day = 1;
+switch ($day)
+{
+    case 1:
+        echo "Сегодня понедельник<br>";
+        break;
+    case 2:
+        echo "Сегодня вторник<br>";
+        break;
+    case 3:
+        echo "Сегодня среда<br>";
+        break;
+    case 4:
+        echo "Сегодня четверг<br>";
+        break;
+    case 5:
+        echo "Сегодня пятница<br>";
+        break;
+    case 6:
+        echo "Сегодня суббота<br>";
+        break;
+    case 7:
+        echo "Сегодня воскресенье<br>";
+        break;
+}
+?>
