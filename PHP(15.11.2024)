@@ -1,0 +1,51 @@
+<?php
+echo "задание 1.1<br>";
+$numbers = [3, 12, 5, 20, 7, 15, 8, 13, 10, 2];
+echo "Четные числа:\n";
+foreach ($numbers as $number) {
+    if ($number % 2 == 0) {
+        echo $number . "\n";
+    }
+}
+
+echo "<br> задание 1.2<br>";
+$sum = 0;
+foreach ($numbers as $number) {
+    if ($number > 10) {
+        $sum += $number;
+    }
+}
+echo "Сумма чисел больше 10: $sum\n";
+
+echo "<br> задание 1.3<br>";
+$countLessThanFive = 0;
+foreach ($numbers as $number) {
+    if ($number < 5) {
+        $countLessThanFive++;
+    }
+}
+echo "Количество чисел меньше 5: $countLessThanFive\n";
+
+echo "<br> задание 2.1<br>";
+$words = ["apple", "banana", "cherry", "date", "elderberry"];
+echo "Слова:\n";
+foreach ($words as $word) {
+    echo "Слово: $word\n";
+}
+
+echo "<br> задание 2.2<br>";
+$longestWord = "";
+foreach ($words as $word) {
+    if (strlen($word) > strlen($longestWord)) {
+        $longestWord = $word;
+    }
+}
+echo "Самая длинная строка: $longestWord\n";
+
+echo "<br> задание 2.3<br>";
+$totalLength = 0;
+foreach ($words as $word) {
+    $totalLength += strlen($word);
+}
+echo "Общее количество символов: $totalLength\n";
+?>
