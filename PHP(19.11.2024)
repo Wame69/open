@@ -1,0 +1,60 @@
+<?php
+echo "Задание 1<br>";
+echo "<table border='1' cellpadding='5' cellspacing='0'>";
+for ($i = 1; $i <= 10; $i++) {
+    echo "<tr>";
+    for ($j = 1; $j <= 10; $j++) {
+        echo "<td>$j * $i = " . ($j * $i) . "</td>";
+    }
+
+    echo "</tr>";
+}
+echo "</table>";
+
+echo "<br>Задание 2<br>";
+$array = [];
+for ($i = 0; $i < 15; $i++) {
+    $array[] = rand(1, 100);
+}
+foreach ($array as $value) {
+    echo $value, ",";
+}
+$arraynew = [];
+foreach ($array as $number) {
+    if ($number % 5 == 0) {
+        $arraynew[] = $number;
+    }
+}
+
+echo "<br>Числа, которые делятся на 5:";
+echo implode(", ", $arraynew);//объединение массива в строку
+echo"<br>";
+
+echo "<br>Задание 3<br>";
+$string = "Hello, world!";
+$vowels = ['a', 'e', 'i', 'o', 'u'];
+$characters = str_split(strtolower($string));// Преобразуем строку в массив символов
+$vowelCount = 0;
+foreach ($characters as $char) {
+    if (in_array($char, $vowels)) {
+        $vowelCount++;
+    }
+}
+echo "Количество гласных в строке: " . $vowelCount ."<br>";
+
+echo "<br>Задание 4<br>";
+$string = "level";
+if ($string == strrev($string)) {
+    echo "true<br>";
+} else {
+    echo "false<br>";
+}
+
+echo "<br>Задание 5<br>";
+$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,.<>?';
+$password = '';
+for ($i = 0; $i < 8; $i++) {
+    $password .= $characters[rand(0, strlen($characters) - 1)];
+}
+echo "Сгенерированный пароль: " . $password;
+?>
