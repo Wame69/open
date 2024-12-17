@@ -1,0 +1,40 @@
+using System;
+
+namespace ReverseWordsApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введите предложение:");
+            string input = Console.ReadLine();
+
+            // Проверка на пустой ввод
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.WriteLine("Пустая строка, попробуйте снова.");
+            }
+            else
+            {
+                string reversedSentence = ReverseWords(input);
+                Console.WriteLine("Предложение с обратным порядком слов:");
+                Console.WriteLine(reversedSentence);
+            }
+
+            Console.WriteLine("Нажмите любую клавишу для выхода...");
+            Console.ReadKey();
+        }
+
+        static string ReverseWords(string sentence)
+        {
+            // Разделение строки на слова по пробелам
+            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            // Разворот массива слов
+            Array.Reverse(words);
+
+            // Объединение слов обратно в строку
+            return string.Join(" ", words);
+        }
+    }
+}
