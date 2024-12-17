@@ -1,40 +1,52 @@
+<Window x:Class="DiskInfoApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Список логических дисков" Height="350" Width="525">
+    <Grid>
+        <DataGrid Name="DisksDataGrid" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="True"/>
+    </Grid>
+</Window>
+/-----------------------------------------------------------------/
 using System;
+using System.IO;
+using System.Linq;
+using System.Windows;
 
-namespace ReverseWordsApp
+namespace DiskInfoApp
 {
-    class Program
+    public partial class MainWindow : Window
     {
-        static void Main(string[] args)
+        public MainWindow()
         {
-            Console.WriteLine("Введите предложение:");
-            string input = Console.ReadLine();
-
-            // Проверка на пустой ввод
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                Console.WriteLine("Пустая строка, попробуйте снова.");
-            }
-            else
-            {
-                string reversedSentence = ReverseWords(input);
-                Console.WriteLine("Предложение с обратным порядком слов:");
-                Console.WriteLine(reversedSentence);
-            }
-
-            Console.WriteLine("Нажмите любую клавишу для выхода...");
-            Console.ReadKey();
+            InitializeComponent();
+            LoadDiskInfo();
         }
 
-        static string ReverseWords(string sentence)
+        private void LoadDiskInfo()
         {
-            // Разделение строки на слова по пробелам
-            string[] words = sentence.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-            // Разворот массива слов
-            Array.Reverse(words);
-
-            // Объединение слов обратно в строку
-            return string.Join(" ", words);
+            var drives = DriveInfo.GetDrives()
+                .Where(d => d.IsReady)
+                .Select(d => new
+                {
+                    Название = d.Name,
+                    Тип = d.DriveType,
+                    ОбщийОбъем = FormatBytes(d.TotalSize),
+                    СвободноеМесто = FormatBytes(d.TotalFreeSpace)
+                })
+                .ToList();
+            DisksDataGrid.ItemsSource = drives;
+        }
+        private string FormatBytes(long bytes)
+        {
+            string[] suffixes = { "Б", "КБ", "МБ", "ГБ", "ТБ" };
+            int i = 0;
+            double dblBytes = bytes;
+            while (dblBytes >= 1024 && i < suffixes.Length - 1)
+            {
+                dblBytes /= 1024;
+                i++;
+            }
+            return $"{dblBytes:0.##} {suffixes[i]}";
         }
     }
 }
