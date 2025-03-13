@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица с сортировкой</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<table id="sortableTable" border="1">
+    <thead>
+        <tr>
+            <th data-column="name">Имя</th>
+            <th data-column="age">Возраст</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Алексей</td>
+            <td>30</td>
+        </tr>
+        <tr>
+            <td>Ирина</td>
+            <td>25</td>
+        </tr>
+        <tr>
+            <td>Мария</td>
+            <td>40</td>
+        </tr>
+        <tr>
+            <td>Марсель</td>
+            <td>18</td>
+        </tr>
+        <tr>
+            <td>Борис</td>
+            <td>29</td>
+        </tr>
+        <tr>
+            <td>Рекс</td>
+            <td>78</td>
+        </tr>
+        <tr>
+            <td>Эдвин</td>
+            <td>45</td>
+        </tr>
+        <tr>
+            <td>Тето</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <td>Ясельная группа детского сада</td>
+            <td>999</td>
+        </tr>
+        
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        $('#sortableTable th').on('click', function() {
+            var column = $(this).data('column');
+            var rows = $('#sortableTable tbody tr').get();
+            var isNumericColumn = column === 'age';
+
+            rows.sort(function(a, b) {
+                var valA = $(a).find('td').eq(column === 'name' ? 0 : 1).text();
+                var valB = $(b).find('td').eq(column === 'name' ? 0 : 1).text();
+
+                if (isNumericColumn) {
+                    return parseInt(valA) - parseInt(valB);
+                } else {
+                    return valA.localeCompare(valB);
+                }
+            });
+
+            $.each(rows, function(index, row) {
+                $('#sortableTable tbody').append(row); 
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

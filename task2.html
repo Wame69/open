@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фильтрация списка</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<input type="text" id="filter" placeholder="Введите текст для фильтрации">
+<ul id="list">
+    <li>Яблоко</li>
+    <li>Банан</li>
+    <li>Апельсин</li>
+    <li>Груша</li>
+    <li>Киви</li>
+</ul>
+
+<script>
+    $(document).ready(function() {
+        $('#filter').on('input', function() {
+            var filterText = $(this).val().toLowerCase();
+            $('#list li').filter(function() {
+                $(this).toggle($(this).text().toLowerCase().includes(filterText));
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

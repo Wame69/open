@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автозаполнение города</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Поиск города</h1>
+
+    <form id="cityForm">
+        <label for="cityInput">Город:</label>
+        <input type="text" id="cityInput" name="city" autocomplete="off" placeholder="Начните вводить город..." />
+        <ul id="cityList"></ul>
+    </form>
+
+    <script>
+        $(document).ready(function(){
+            $('#cityInput').on('input', function() {
+                let query = $(this).val();
+                if (query.length >= 3) {
+                    $.ajax({
+                        url: 'get_cities.php',
+                        method: 'GET',
+                        data: { query: query },
+                        success: function(data) {
+                            let cities = JSON.parse(data);
+                            let cityList = $('#cityList');
+                            cityList.empty();
+                            if (cities.length > 0) {
+                                cities.forEach(function(city) {
+                                    cityList.append('<li>' + city + '</li>');
+                                });
+                            } else {
+                                cityList.append('<li>Город не найден</li>');
+                            }
+                        },
+                        error: function() {
+                            console.log('Ошибка при запросе к серверу');
+                        }
+                    });
+                } else {
+                    $('#cityList').empty();
+                }
+            });
+
+            $(document).on('click', '#cityList li', function() {
+                $('#cityInput').val($(this).text());
+                $('#cityList').empty();
+            });
+        });
+    </script>
+
+</body>
+</html>

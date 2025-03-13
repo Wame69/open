@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генерация контента с API</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h1>Получение данных из API</h1>
+    <button id="loadDataBtn">Загрузить данные</button>
+    <div id="dataContainer"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#loadDataBtn').click(function() {
+                $.ajax({
+                    url: 'https://jsonplaceholder.typicode.com/posts', 
+                    method: 'GET',
+                    success: function(data) {
+                        let content = '<ul>';
+                        data.slice(0, 5).forEach(post => { 
+                            content += `<li><strong>${post.title}</strong><br>${post.body}</li>`;
+                        });
+                        content += '</ul>';
+                        $('#dataContainer').html(content);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Динамическое меню</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        #menu { 
+            list-style: none; 
+            padding: 0;
+        }
+        #menu li { 
+            position: relative; 
+            display: inline-block; 
+            margin-right: 10px;
+        }
+        #submenu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background-color: lightgray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<ul id="menu">
+    <li>
+        <a href="#">Главное меню</a>
+        <ul id="submenu">
+            <li><a href="#">Пункт 1</a></li>
+            <li><a href="#">Пункт 2</a></li>
+            <li><a href="#">Пункт 3</a></li>
+        </ul>
+    </li>
+</ul>
+
+<script>
+    $(document).ready(function() {
+        $('#menu li').hover(
+            function() {
+                $(this).children('#submenu').stop(true, true).slideDown();
+            },
+            function() {
+                $(this).children('#submenu').stop(true, true).slideUp();
+            }
+        );
+
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('#menu').length) {
+                $('#submenu').slideUp();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
