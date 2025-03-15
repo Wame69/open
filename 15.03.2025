@@ -1,0 +1,159 @@
+using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using Konscious.Security.Cryptography;  // Подключаем библиотеку Argon2
+using Newtonsoft.Json;
+using System.Runtime.InteropServices;
+using System.Security;
+
+class Program
+{
+    static SecureString ReadPassword()
+    {
+        SecureString securePassword = new SecureString();
+        ConsoleKey key;
+        do
+        {
+            key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.Enter)
+                break;
+
+            if (key == ConsoleKey.Backspace && securePassword.Length > 0)
+                securePassword.RemoveAt(securePassword.Length - 1);
+            else
+                securePassword.AppendChar((char)key);
+        } while (key != ConsoleKey.Enter);
+
+        Console.WriteLine();
+        return securePassword;
+    }
+
+    public static (byte[] encryptedData, byte[] salt, byte[] iv) Encrypt(string login, string password, string masterPassword)
+    {
+        byte[] salt = new byte[16];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(salt);
+        }
+
+        // Используем Argon2 для хеширования мастер-пароля (Argon2d)
+        var key = HashPasswordWithArgon2(masterPassword, salt);
+
+        byte[] iv = new byte[16];
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(iv);
+        }
+
+        byte[] encryptedData;
+        using (Aes aesAlg = Aes.Create())
+        {
+            aesAlg.Key = key;
+            aesAlg.Mode = CipherMode.CBC; // Используем режим CBC
+            aesAlg.Padding = PaddingMode.PKCS7; // Используем PaddingMode.PKCS7
+
+            using (ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, iv))
+            {
+                encryptedData = encryptor.TransformFinalBlock(Encoding.UTF8.GetBytes(login + ":" + password), 0, Encoding.UTF8.GetBytes(login + ":" + password).Length);
+            }
+        }
+
+        return (encryptedData, salt, iv);
+    }
+
+    public static string Decrypt(byte[] encryptedData, byte[] salt, byte[] iv, string masterPassword)
+    {
+        var key = HashPasswordWithArgon2(masterPassword, salt);
+
+        byte[] decryptedData;
+        using (Aes aesAlg = Aes.Create())
+        {
+            aesAlg.Key = key;
+            aesAlg.Mode = CipherMode.CBC; // Используем режим CBC
+            aesAlg.Padding = PaddingMode.PKCS7; // Используем PaddingMode.PKCS7
+
+            using (ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, iv))
+            {
+                decryptedData = decryptor.TransformFinalBlock(encryptedData, 0, encryptedData.Length);
+            }
+        }
+
+        return Encoding.UTF8.GetString(decryptedData);
+    }
+
+    private static byte[] HashPasswordWithArgon2(string password, byte[] salt)
+    {
+        using (var argon2 = new Argon2d(Encoding.UTF8.GetBytes(password))) // Argon2d
+        {
+            argon2.Salt = salt;
+            argon2.DegreeOfParallelism = 8; // степень параллелизма
+            argon2.MemorySize = 1 << 16; // 64 MiB
+            argon2.Iterations = 4;
+
+            return argon2.GetBytes(32); // возвращаем хеш размером 32 байта
+        }
+    }
+
+    // Класс для хранения данных пользователя
+    public class UserData
+    {
+        public string Salt { get; set; }
+        public string Iv { get; set; }
+        public string EncryptedData { get; set; }
+    }
+
+    public static void SaveToFile(string filePath, UserData userData)
+    {
+        string json = JsonConvert.SerializeObject(userData);
+        File.WriteAllText(filePath, json);
+    }
+
+    public static UserData LoadFromFile(string filePath)
+    {
+        string json = File.ReadAllText(filePath);
+        return JsonConvert.DeserializeObject<UserData>(json);
+    }
+
+    public static bool ComparePasswords(string inputPassword, string storedPassword)
+    {
+        return CryptographicOperations.FixedTimeEquals(Encoding.UTF8.GetBytes(inputPassword), Encoding.UTF8.GetBytes(storedPassword));
+    }
+
+    static void Main()
+    {
+        string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "C:\\023\\zxcstest\\ConsoleApp2\\ConsoleApp2\\bin\\Debug\\net8.0\\user_data.json");
+
+        Console.Write("Введите мастер-пароль: ");
+        SecureString masterPassword = ReadPassword();
+
+        IntPtr unmanagedString = Marshal.SecureStringToBSTR(masterPassword);
+        string passwordString = Marshal.PtrToStringBSTR(unmanagedString);
+        Marshal.ZeroFreeBSTR(unmanagedString);
+
+        string login = "user1";
+        string password = "password123";
+
+        var (encryptedData, salt, iv) = Encrypt(login, password, passwordString);
+
+        var userData = new UserData
+        {
+            Salt = Convert.ToBase64String(salt),
+            Iv = Convert.ToBase64String(iv),
+            EncryptedData = Convert.ToBase64String(encryptedData)
+        };
+
+        SaveToFile(filePath, userData);
+
+        var loadedData = LoadFromFile(filePath);
+        string decryptedData = Decrypt(
+            Convert.FromBase64String(loadedData.EncryptedData),
+            Convert.FromBase64String(loadedData.Salt),
+            Convert.FromBase64String(loadedData.Iv),
+            passwordString
+        );
+
+        Console.WriteLine("Расшифрованные данные: " + decryptedData);
+    }
+}
